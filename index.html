@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Guía visual para practicar la pronunciación de una canción en inglés." />
-    <title>Get You · Guía de pronunciación</title>
+    <meta name="description" content="Guía visual para aprender pronunciación, significado y escritura en inglés." />
+    <title>Wordwise · Guía de pronunciación</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
@@ -13,24 +13,26 @@
   <body>
     <main class="shell">
       <header class="hero">
-        <div class="eyebrow">ENGLISH SONG LAB · 01</div>
-        <h1>Get You <span>·</span> pronunciación</h1>
+        <div class="eyebrow">ENGLISH WORD LAB · 01</div>
+        <div class="topbar">
+          <h1>Wordwise <span>·</span> pronunciación</h1>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro">◐ <span>Oscuro</span></button>
+        </div>
         <p class="hero-copy">
-          Practica cada palabra con una aproximación fonética en español y escucha
-          cada frase a tu propio ritmo.
+          Aprende cómo se escribe, cómo se pronuncia y qué significa cada palabra
+          en inglés. Escucha con la voz y velocidad que prefieras.
         </p>
         <div class="artist-row">
-          <span>Daniel Caesar</span>
-          <i>feat.</i>
-          <span>Kali Uchis</span>
+          <span>Vocabulary</span>
+          <i>para todos los niveles</i>
         </div>
       </header>
 
-      <section class="notice" aria-label="Nota sobre derechos de autor">
-        <strong>Usa tu texto autorizado</strong>
+      <section class="notice" aria-label="Cómo funciona">
+        <strong>Aprende palabra por palabra</strong>
         <p>
-          Pega aquí la letra que tengas permiso de usar. La conversión ocurre
-          localmente en tu navegador y no se guarda.
+          Escribe una frase o varias palabras en inglés. Todo se procesa localmente
+          en tu navegador y no se guarda.
         </p>
       </section>
 
@@ -39,16 +41,16 @@
           <div class="section-heading">
             <div>
               <span class="step">01</span>
-              <h2>Pega una frase</h2>
+              <h2>Escribe palabras</h2>
             </div>
             <span class="small-label">Texto original</span>
           </div>
-          <label class="sr-only" for="lyrics-input">Texto en inglés</label>
-          <textarea id="lyrics-input" placeholder="Escribe o pega aquí una frase en inglés…"></textarea>
+          <label class="sr-only" for="lyrics-input">Palabras o frase en inglés</label>
+          <textarea id="lyrics-input" placeholder="Ejemplo: I want to learn English…"></textarea>
           <div class="input-actions">
             <span id="word-count">0 palabras</span>
             <button id="generate-button" class="primary-button" type="button">
-              Crear guía <span aria-hidden="true">→</span>
+              Analizar palabras <span aria-hidden="true">→</span>
             </button>
           </div>
         </div>
@@ -57,14 +59,14 @@
           <div class="section-heading">
             <div>
               <span class="step">02</span>
-              <h2>Lee y repite</h2>
+              <h2>Pronuncia y aprende</h2>
             </div>
             <button id="clear-button" class="text-button" type="button">Limpiar</button>
           </div>
           <div id="guide-output" class="guide-output empty-state">
-            <div class="empty-icon">♪</div>
-            <p>Tu guía de pronunciación aparecerá aquí.</p>
-            <span>Una tarjeta por palabra, con apoyo fonético y audio.</span>
+            <div class="empty-icon">Aa</div>
+            <p>Tu guía aparecerá aquí.</p>
+            <span>Verás escritura, pronunciación, significado y audio.</span>
           </div>
         </div>
       </section>
