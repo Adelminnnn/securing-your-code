@@ -118,16 +118,22 @@ textarea::placeholder { color: #aaa4a0; }
 .empty-icon { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; margin-bottom: 8px; background: var(--lavender); color: #8376a3; font-size: 1.4rem; }
 .empty-state p { margin: 0 0 5px; color: var(--ink); font-weight: 700; }
 .empty-state span { font-size: .78rem; }
-.word-card { min-width: 150px; flex: 1 1 150px; padding: 13px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.word-card { min-width: 150px; flex: 1 1 150px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); overflow: hidden; }
 .word-card:nth-child(3n) { background: #fff9e8; }
 .word-card:nth-child(3n + 1) { background: #f8f4ff; }
 body.dark .word-card:nth-child(3n) { background: #3c3022; }
 body.dark .word-card:nth-child(3n + 1) { background: #302942; }
-.word { display: block; font-weight: 700; }
+.word-summary { display: block; padding: 13px 14px; cursor: pointer; list-style: none; }
+.word-summary::-webkit-details-marker { display: none; }
+.word-summary::after { float: right; margin-top: 3px; color: var(--muted); content: "+"; font-size: .9rem; }
+.word-card[open] .word-summary::after { content: "−"; }
+.word { display: block; padding-right: 18px; font-weight: 700; }
 .phonetic { display: block; margin-top: 5px; color: var(--peach-dark); font-size: .8rem; }
-.meaning { display: block; min-height: 34px; margin-top: 10px; color: var(--muted); font-size: .76rem; line-height: 1.4; }
+.word-details { padding: 0 14px 14px; border-top: 1px solid var(--line); }
+.meaning-list { margin: 12px 0 10px; padding-left: 18px; color: var(--muted); font-size: .76rem; line-height: 1.45; }
+.meaning-list li + li { margin-top: 5px; }
 .voice-select { width: 100%; margin-top: 11px; border: 1px solid var(--line); border-radius: 7px; padding: 5px; background: var(--control); color: var(--ink); font-size: .7rem; }
-.speak-button { float: right; border: 0; padding: 2px; background: transparent; color: var(--muted); font-size: .82rem; }
+.speak-button { float: right; position: relative; z-index: 1; border: 0; padding: 2px; background: transparent; color: var(--muted); font-size: .82rem; }
 .speak-button:hover { color: var(--peach-dark); }
 .speed-panel { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin-bottom: 8px; padding: 11px 13px; border-radius: 11px; background: var(--lavender); font-size: .73rem; }
 .speed-panel strong { margin-right: 3px; }

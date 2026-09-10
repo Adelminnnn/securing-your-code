@@ -18,16 +18,48 @@ const pronunciationMap = {
 };
 
 const meanings = {
-  a: "un / una", and: "y", are: "son / están", baby: "bebé", be: "ser / estar",
-  beautiful: "hermoso/a", can: "poder", do: "hacer", for: "para / por", get: "obtener",
-  good: "bueno/a", have: "tener", he: "él", i: "yo", in: "en / dentro de",
-  is: "es / está", it: "eso / ello", just: "solo / justo", know: "saber / conocer",
-  love: "amor / amar", me: "me / a mí", my: "mi", never: "nunca", no: "no",
-  of: "de", on: "en / sobre", one: "uno", really: "realmente", say: "decir",
-  she: "ella", so: "así que / tan", that: "eso / que", the: "el / la / los / las",
-  there: "allí / ahí", to: "a / para", want: "querer", we: "nosotros/as",
-  what: "qué / lo que", when: "cuándo / cuando", with: "con", you: "tú / usted",
-  your: "tu / su"
+  a: ["un / una (artículo indefinido)", "por (frecuencia: twice a day = dos veces al día)"],
+  and: ["y (conjunción)", "además / también (en expresiones)"],
+  are: ["son / están (you, we, they)", "eres / estás (you)"],
+  baby: ["bebé", "cariño / persona querida (informal)"],
+  be: ["ser", "estar", "existir", "portarse o comportarse (be good = pórtate bien)"],
+  beautiful: ["hermoso/a", "precioso/a", "excelente o agradable (a beautiful idea = una idea excelente)"],
+  can: ["poder (capacidad)", "poder (permiso)", "lata / recipiente (sustantivo)"],
+  do: ["hacer", "realizar (una actividad)", "auxiliar para preguntas y énfasis"],
+  for: ["para (destinatario o propósito)", "por (causa o intercambio)", "durante (periodo de tiempo)"],
+  get: ["obtener / conseguir", "recibir", "llegar (get home = llegar a casa)", "ponerse o volverse (get tired = cansarse)", "entender (I get it = lo entiendo)"],
+  good: ["bueno/a", "bien (después de be: I am good)", "hábil (good at = bueno en)", "amable o correcto"],
+  have: ["tener / poseer", "haber (have eaten = haber comido)", "tomar o experimentar (have lunch = almorzar)"],
+  he: ["él (pronombre masculino)"],
+  i: ["yo (pronombre personal)"],
+  in: ["en / dentro de (lugar)", "en (meses, años o periodos)", "de moda (in style = de moda)"],
+  is: ["es / está (he, she, it)", "existe (there is = hay)"],
+  it: ["eso / ello", "lo / la (objeto o situación)", "pronombre para animales, objetos o clima"],
+  just: ["solo / solamente", "justo / equitativo", "acabar de (just arrived = acaba de llegar)", "exactamente"],
+  know: ["saber (información)", "conocer (persona o lugar)", "reconocer o distinguir"],
+  love: ["amor (sustantivo)", "amar / encantar (verbo)", "cariño o afecto"],
+  me: ["me / a mí (objeto)", "yo (después de preposición, informal)"],
+  my: ["mi / mis (posesivo)"],
+  never: ["nunca", "jamás"],
+  no: ["no (respuesta negativa)", "ningún / ninguna (no problem = ningún problema)", "opuesto de yes"],
+  of: ["de (posesión o relación)", "de (cantidad o parte)", "sobre / acerca de"],
+  on: ["en / sobre (superficie)", "encendido (the light is on)", "el (día o fecha)", "sobre un tema (a book on art)"],
+  one: ["uno / una", "uno (persona o cosa)", "único (the one = el indicado)", "se usa para no repetir un sustantivo"],
+  really: ["realmente", "de verdad", "muy (informal, como intensificador)"],
+  say: ["decir", "expresar una idea", "indicar o mostrar (the sign says...)"],
+  she: ["ella (pronombre femenino)"],
+  so: ["así que / por eso", "tan (so beautiful = tan hermoso)", "así / de esa manera", "entonces (para continuar una conversación)"],
+  that: ["eso / aquello", "que (conjunción)", "ese / esa", "tan ... que (so ... that)"],
+  the: ["el / la / los / las (artículo definido)", "señala algo específico o ya mencionado"],
+  there: ["allí / ahí (lugar)", "hay (there is / there are)", "en ese punto o situación"],
+  to: ["a / hacia (dirección)", "para (propósito)", "marca del infinitivo (to learn = aprender)", "hasta (from Monday to Friday)"],
+  want: ["querer / desear", "necesitar o hacer falta (informal)", "buscar o solicitar"],
+  we: ["nosotros / nosotras"],
+  what: ["qué (pregunta)", "lo que / aquello que", "qué ... (sorpresa o énfasis)"],
+  when: ["cuándo (pregunta)", "cuando (momento)", "en el momento en que"],
+  with: ["con (compañía)", "con (herramienta o manera)", "de acuerdo con"],
+  you: ["tú / usted", "ustedes / vosotros (plural)", "uno / cualquiera (uso general)"],
+  your: ["tu / tus", "su / sus (de usted o ustedes)"]
 };
 
 function approximate(word) {
@@ -72,7 +104,7 @@ function voiceOptions() {
 }
 
 function meaning(word) {
-  return meanings[word.toLowerCase().replace(/[^a-z']/g, "")] || "Significado según el contexto";
+  return meanings[word.toLowerCase().replace(/[^a-z']/g, "")] || ["Significado según el contexto", "Añade una frase completa para precisar esta palabra"];
 }
 
 function renderGuide() {
@@ -92,13 +124,16 @@ function renderGuide() {
   text.split(/\s+/).forEach((token) => {
     const word = token.replace(/[.,!?;:"]/g, "");
     if (!word) return;
-    const card = document.createElement("div");
+    const card = document.createElement("details");
+    const summary = document.createElement("summary");
     const speakButton = document.createElement("button");
     const wordElement = document.createElement("span");
     const phoneticElement = document.createElement("span");
-    const meaningElement = document.createElement("span");
+    const details = document.createElement("div");
+    const meaningsElement = document.createElement("ul");
     const voiceSelect = document.createElement("select");
     card.className = "word-card";
+    summary.className = "word-summary";
     speakButton.className = "speak-button";
     speakButton.type = "button";
     speakButton.setAttribute("aria-label", `Escuchar ${word}`);
@@ -107,11 +142,18 @@ function renderGuide() {
     wordElement.textContent = word;
     phoneticElement.className = "phonetic";
     phoneticElement.textContent = approximate(word);
-    meaningElement.className = "meaning";
-    meaningElement.textContent = `Significa: ${meaning(word)}`;
+    details.className = "word-details";
+    meaningsElement.className = "meaning-list";
+    meaning(word).forEach((item) => {
+      const meaningItem = document.createElement("li");
+      meaningItem.textContent = item;
+      meaningsElement.appendChild(meaningItem);
+    });
     voiceSelect.className = "voice-select";
     voiceSelect.innerHTML = voiceOptions();
-    card.append(speakButton, wordElement, phoneticElement, meaningElement, voiceSelect);
+    summary.append(speakButton, wordElement, phoneticElement);
+    details.append(meaningsElement, voiceSelect);
+    card.append(summary, details);
     speakButton.addEventListener("click", () => speak(word, voiceSelect.value));
     output.appendChild(card);
   });
