@@ -25,6 +25,7 @@ const meanings = {
   be: ["ser", "estar", "existir", "portarse o comportarse (be good = pórtate bien)"],
   beautiful: ["hermoso/a", "precioso/a", "excelente o agradable (a beautiful idea = una idea excelente)"],
   even: ["incluso / hasta (para enfatizar algo inesperado)", "incluso si / aunque (even if)", "par (número divisible entre dos)", "igualado o nivelado (an even surface)", "uniforme o equilibrado", "alisar / nivelar (verbo: even out)"],
+  girl: ["niña", "chica / muchacha", "hija (informal, según el contexto)", "mujer joven"],
   can: ["poder (capacidad)", "poder (permiso)", "lata / recipiente (sustantivo)"],
   do: ["hacer", "realizar (una actividad)", "auxiliar para preguntas y énfasis"],
   for: ["para (destinatario o propósito)", "por (causa o intercambio)", "durante (periodo de tiempo)"],
