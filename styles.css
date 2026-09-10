@@ -133,7 +133,6 @@ body.dark .word-card:nth-child(3n + 1) { background: #302942; }
 .meaning-list { margin: 12px 0 10px; padding-left: 18px; color: var(--muted); font-size: .76rem; line-height: 1.45; }
 .meaning-list li + li { margin-top: 5px; }
 .usage-example { display: block; margin-top: 3px; color: var(--peach-dark); font-style: italic; }
-.loading-meaning { color: var(--peach-dark); list-style: none; margin-left: -18px; }
 .voice-select { width: 100%; margin-top: 11px; border: 1px solid var(--line); border-radius: 7px; padding: 5px; background: var(--control); color: var(--ink); font-size: .7rem; }
 .speak-button { float: right; position: relative; z-index: 1; border: 0; padding: 2px; background: transparent; color: var(--muted); font-size: .82rem; }
 .speak-button:hover { color: var(--peach-dark); }

@@ -105,52 +105,8 @@ function voiceOptions() {
 }
 
 function meaning(word) {
-  return meanings[word.toLowerCase().replace(/[^a-z']/g, "")] || [];
-}
-
-async function lookupMeanings(word) {
-  const localMeanings = meaning(word);
-  if (localMeanings.length) {
-    return localMeanings.map((text) => ({ text, source: "Guía de uso" }));
-  }
-
-  const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
-  if (!response.ok) throw new Error("Dictionary lookup failed");
-  const entries = await response.json();
-  const definitions = [];
-  entries.forEach((entry) => {
-    entry.meanings?.forEach((part) => {
-      part.definitions?.forEach((definition) => {
-        definitions.push({
-          text: definition.definition,
-          example: definition.example || "",
-          source: part.partOfSpeech || "Uso general"
-        });
-      });
-    });
-  });
-  return definitions;
-}
-
-function renderMeanings(list, items) {
-  list.replaceChildren();
-  if (!items.length) {
-    const item = document.createElement("li");
-    item.textContent = "No hay una acepción registrada para esta palabra.";
-    list.appendChild(item);
-    return;
-  }
-  items.forEach((meaningItem) => {
-    const item = document.createElement("li");
-    item.textContent = `${meaningItem.source}: ${meaningItem.text}`;
-    if (meaningItem.example) {
-      const example = document.createElement("span");
-      example.className = "usage-example";
-      example.textContent = `Uso: “${meaningItem.example}”`;
-      item.appendChild(example);
-    }
-    list.appendChild(item);
-  });
+  const key = word.toLowerCase().replace(/[^a-z']/g, "");
+  return meanings[key] || ["Esta palabra no tiene significados guardados todavía en la guía."];
 }
 
 function renderGuide() {
@@ -195,12 +151,6 @@ function renderGuide() {
       meaningItem.textContent = item;
       meaningsElement.appendChild(meaningItem);
     });
-    if (!meaning(word).length) {
-      const loading = document.createElement("li");
-      loading.className = "loading-meaning";
-      loading.textContent = "Consultando todas sus acepciones y usos…";
-      meaningsElement.appendChild(loading);
-    }
     voiceSelect.className = "voice-select";
     voiceSelect.innerHTML = voiceOptions();
     summary.append(speakButton, wordElement, phoneticElement);
@@ -211,16 +161,6 @@ function renderGuide() {
       speak(word, voiceSelect.value);
     });
     output.appendChild(card);
-    if (!meaning(word).length) {
-      lookupMeanings(word).then((items) => {
-        renderMeanings(meaningsElement, items);
-      }).catch(() => {
-        renderMeanings(meaningsElement, [{
-          source: "Uso",
-          text: "No se pudo consultar el diccionario. Comprueba tu conexión e inténtalo de nuevo."
-        }]);
-      });
-    }
   });
 }
 
