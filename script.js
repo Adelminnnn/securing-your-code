@@ -110,6 +110,46 @@ function meaning(word) {
   return meanings[key] || ["Esta palabra no tiene significados guardados todavía en la guía."];
 }
 
+async function lookupMeanings(word) {
+  const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+  if (!response.ok) throw new Error("No dictionary entry");
+  const entries = await response.json();
+  const results = [];
+  entries.forEach((entry) => {
+    entry.meanings?.forEach((part) => {
+      part.definitions?.forEach((definition) => {
+        results.push({
+          type: part.partOfSpeech || "uso general",
+          definition: definition.definition,
+          example: definition.example || ""
+        });
+      });
+    });
+  });
+  return results;
+}
+
+function renderMeanings(list, items) {
+  list.replaceChildren();
+  if (!items.length) {
+    const item = document.createElement("li");
+    item.textContent = "No se encontraron acepciones para esta palabra.";
+    list.appendChild(item);
+    return;
+  }
+  items.forEach((meaningItem) => {
+    const item = document.createElement("li");
+    item.textContent = `${meaningItem.type}: ${meaningItem.definition}`;
+    if (meaningItem.example) {
+      const example = document.createElement("span");
+      example.className = "usage-example";
+      example.textContent = `Uso: “${meaningItem.example}”`;
+      item.appendChild(example);
+    }
+    list.appendChild(item);
+  });
+}
+
 function renderGuide() {
   const text = input.value.trim();
   if (!text) {
@@ -147,6 +187,10 @@ function renderGuide() {
     phoneticElement.textContent = approximate(word);
     details.className = "word-details";
     meaningsElement.className = "meaning-list";
+    const loadingItem = document.createElement("li");
+    loadingItem.className = "loading-meaning";
+    loadingItem.textContent = "Consultando acepciones y usos…";
+    meaningsElement.appendChild(loadingItem);
     meaning(word).forEach((item) => {
       const meaningItem = document.createElement("li");
       meaningItem.textContent = item;
@@ -162,6 +206,16 @@ function renderGuide() {
       speak(word, voiceSelect.value);
     });
     output.appendChild(card);
+    lookupMeanings(word).then((items) => {
+      renderMeanings(meaningsElement, items);
+    }).catch(() => {
+      const localItems = meaning(word).map((text) => ({
+        type: "guía local",
+        definition: text,
+        example: ""
+      }));
+      renderMeanings(meaningsElement, localItems);
+    });
   });
 }
 
