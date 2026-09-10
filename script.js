@@ -105,6 +105,19 @@ function voiceOptions() {
   return `<option value="">Voz predeterminada</option>${voices.map((voice) => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`).join("")}`;
 }
 
+function approximateSentence(text) {
+  return text.split(/(\s+)/).map((part) => /\s+/.test(part) ? part : approximate(part)).join("");
+}
+
+async function lookupSentenceMeaning(sentence) {
+  const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(sentence)}&langpair=en|es`);
+  if (!response.ok) throw new Error("Translation unavailable");
+  const data = await response.json();
+  const translation = data.responseData?.translatedText;
+  if (!translation) throw new Error("Translation unavailable");
+  return translation;
+}
+
 function meaning(word) {
   const key = word.toLowerCase().replace(/[^a-z']/g, "");
   return meanings[key] || ["Esta palabra no tiene significados guardados todavía en la guía."];
@@ -164,6 +177,40 @@ function renderGuide() {
     selectedRate = Number(button.dataset.rate);
     output.querySelectorAll(".speed-button").forEach((item) => item.classList.toggle("active", item === button));
   }));
+  const sentenceCard = document.createElement("section");
+  const sentenceLabel = document.createElement("span");
+  const sentenceOriginal = document.createElement("p");
+  const sentencePhonetic = document.createElement("p");
+  const sentenceMeaning = document.createElement("p");
+  const sentenceActions = document.createElement("div");
+  const sentenceSpeak = document.createElement("button");
+  const sentenceVoice = document.createElement("select");
+  sentenceCard.className = "sentence-card";
+  sentenceLabel.className = "sentence-label";
+  sentenceLabel.textContent = "Oración completa";
+  sentenceOriginal.className = "sentence-original";
+  sentenceOriginal.textContent = text;
+  sentencePhonetic.className = "sentence-phonetic";
+  sentencePhonetic.textContent = approximateSentence(text);
+  sentenceMeaning.className = "sentence-meaning sentence-loading";
+  sentenceMeaning.textContent = "Traduciendo el significado de la oración…";
+  sentenceSpeak.className = "sentence-speak";
+  sentenceSpeak.type = "button";
+  sentenceSpeak.textContent = "▶ Escuchar oración";
+  sentenceVoice.className = "voice-select sentence-voice";
+  sentenceVoice.innerHTML = voiceOptions();
+  sentenceSpeak.addEventListener("click", () => speak(text, sentenceVoice.value));
+  sentenceActions.className = "sentence-actions";
+  sentenceActions.append(sentenceSpeak, sentenceVoice);
+  sentenceCard.append(sentenceLabel, sentenceOriginal, sentencePhonetic, sentenceMeaning, sentenceActions);
+  output.appendChild(sentenceCard);
+  lookupSentenceMeaning(text).then((translation) => {
+    sentenceMeaning.classList.remove("sentence-loading");
+    sentenceMeaning.textContent = `Significado: ${translation}`;
+  }).catch(() => {
+    sentenceMeaning.classList.remove("sentence-loading");
+    sentenceMeaning.textContent = "Significado: añade una oración en inglés para obtener su traducción.";
+  });
   text.split(/\s+/).forEach((token) => {
     const word = token.replace(/[.,!?;:"]/g, "");
     if (!word) return;

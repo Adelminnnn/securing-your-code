@@ -141,6 +141,16 @@ body.dark .word-card:nth-child(3n + 1) { background: #302942; }
 .speed-panel strong { margin-right: 3px; }
 .speed-button { border: 1px solid transparent; border-radius: 6px; padding: 5px 8px; background: var(--card); color: var(--muted); font-size: .72rem; }
 .speed-button.active, .speed-button:hover { border-color: var(--peach); color: var(--peach-dark); }
+.sentence-card { flex: 1 1 100%; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--lavender); }
+.sentence-label { display: block; color: var(--peach-dark); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.sentence-original { margin: 8px 0 3px; font-size: 1.05rem; font-weight: 700; }
+.sentence-phonetic { margin: 0; color: var(--peach-dark); font-size: .9rem; }
+.sentence-meaning { margin: 12px 0 14px; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+.sentence-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.sentence-speak { border: 0; border-radius: 999px; padding: 9px 13px; background: var(--ink); color: var(--card); font-size: .76rem; font-weight: 700; }
+.sentence-speak:hover { background: var(--peach-dark); }
+.sentence-voice { max-width: 260px; margin-top: 0; }
+.sentence-loading { color: var(--peach-dark); font-style: italic; }
 
 footer { display: flex; gap: 12px; justify-content: center; margin-top: 26px; color: #aaa4a0; font-size: .72rem; }
 .footer-dot { color: var(--peach); }
